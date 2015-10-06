@@ -1,0 +1,28 @@
+#how vk audio html works
+
+<div class="audio fl_l">
+    <div class="area clear_fix"> this has buttons and info in it
+        <div class="play_btn fl_l" onclick="bunch of shit">
+            <div class="play_btn_wrap">
+                <div class="play_new"> this is a picture of a button
+                </div>
+            </div>
+            <input hidden value="LINK_TO.MP3">
+        </div>
+        <div class="info fl_l">
+            <div class="title_wrap fl_l">
+                <b>
+                    <a href="link_to_search_artist">Artist Name</a>
+                </b>
+                " - "
+                <span class="title">
+                    {{ if there are lyrics available }}
+                    <a href="show_lyrics">Track Name</a>
+                    {{ else }}
+                    Track Name
+                    {{ endif }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
