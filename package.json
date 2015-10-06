@@ -1,5 +1,5 @@
 {
-  "name": "crome extention",
+  "name": "chrome-extention",
   "version": "1.0.0",
   "description": "",
   "main": "content.js",
@@ -9,13 +9,10 @@
   "author": "many-points",
   "license": "ISC",
   "devDependencies": {
-    "mocha": "^2.3.3",
-    "should": "^7.1.0",
     "coffee-script": "^1.10.0"
   },
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script/register -R spec -u bdd",
-    "start": "coffee src/content.coffee",
-    "build": "coffee --compile --output dist"
+    "prestart": "coffee --compile --bare --output dist src",
+    "start": "coffee src/content.coffee"
   }
 }
