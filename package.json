@@ -2,7 +2,7 @@
   "name": "chrome-extention",
   "version": "1.0.0",
   "description": "",
-  "main": "content.js",
+  "main": "contentv2.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

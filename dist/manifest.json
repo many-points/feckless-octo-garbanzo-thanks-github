@@ -3,8 +3,8 @@
   "name": "My Cool Extension",
   "version": "0.1",
   "content_scripts": [{
-    "matches": ["http://vk.com/*"],
-    "js": ["jquery.js", "content.js"]
+    "matches": ["http://vk.com/*", "https://vk.com/*"],
+    "js": ["content.js"]
   }],
   "background": {
     "scripts": ["background.js"],
