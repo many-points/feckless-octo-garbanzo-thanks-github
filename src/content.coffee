@@ -23,15 +23,14 @@ vkdl =
 
   add_event: (node) ->
     button = node.querySelectorAll('.area.clear_fix')[0]
-    button.addEventListener 'contextmenu', @download_file_event, false
+    button.addEventListener 'contextmenu', vkdl.download_file_event, false
     return
 
   add_event_to_existing_nodes: ->
-    that = @
     nodes = document.querySelectorAll '.audio'
     [].forEach.call nodes, (node) ->
       console.log node
-      that.add_event node
+      vkdl.add_event node
     return
 
   observer: new MutationObserver (mutations) ->

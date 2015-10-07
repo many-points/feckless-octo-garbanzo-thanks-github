@@ -12,6 +12,6 @@
     "coffee-script": "^1.10.0"
   },
   "scripts": {
-    "start": "coffee --compile --bare --output dist --watch src"
+    "start": "coffee --compile --output dist --watch src"
   }
 }
