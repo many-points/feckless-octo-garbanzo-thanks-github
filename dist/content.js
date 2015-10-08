@@ -39,11 +39,12 @@
         url = vkdl.get_url(this.parentElement);
         name = vkdl.get_song_name(this.parentElement);
         console.log("vkdl: " + name + "\n" + url);
-        return options = {
+        options = {
           url: url,
           filename: name,
           conflictAction: 'uniquify'
         };
+        return chrome.runtime.sendMessage(options);
       };
     },
     add_event: function(node) {

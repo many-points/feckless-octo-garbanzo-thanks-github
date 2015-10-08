@@ -35,7 +35,7 @@ vkdl =
       name = vkdl.get_song_name @parentElement
       console.log "vkdl: #{name}\n#{url}"
       options = url: url, filename: name, conflictAction: 'uniquify'
-      #chrome.runtime.sendMessage options
+      chrome.runtime.sendMessage options
 
   add_event: (node) ->
     button = node.querySelector '.area.clear_fix'
