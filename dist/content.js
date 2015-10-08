@@ -2,43 +2,50 @@
 (function() {
   var vkdl;
 
+  Array.prototype.first = function() {
+    return this[0];
+  };
+
+  NodeList.prototype.first = function() {
+    return this[0];
+  };
+
+  NodeList.prototype.forEach = Array.prototype.forEach;
+
   vkdl = {
     get_url: function(parent) {
-      var input, pos;
-      input = parent.querySelectorAll("input")[0];
-      pos = input.value.indexOf('?');
-      return input.value.substr(0, pos);
+      return parent.querySelector("input").value.split('?').first(null);
     },
     get_song_name: function(parent) {
-      var name, title_wrap;
-      title_wrap = parent.querySelectorAll(".title_wrap")[0];
-      name = title_wrap.innerText.trim().replace('/', '-');
-      return name + ".mp3";
+      return parent.querySelector(".title_wrap").innerText.trim(null).replace('/', '-').concat('.mp3');
     },
-    download_file_event: function(event) {
-      var name, options, parent, url;
-      event.preventDefault();
-      parent = this.parentElement;
-      url = vkdl.get_url(parent);
-      name = vkdl.get_song_name(parent);
-      options = {
-        url: url,
-        filename: name,
-        conflictAction: 'uniquify'
+    download_file_event: function() {
+      var that;
+      that = this;
+      return function(event) {
+        var name, options, url;
+        event.preventDefault();
+        url = that.get_url(this.parentElement);
+        name = that.get_song_name(this.parentElement);
+        console.log(name + " " + url);
+        return options = {
+          url: url,
+          filename: name,
+          conflictAction: 'uniquify'
+        };
       };
-      return console.log(name + " " + url);
     },
     add_event: function(node) {
       var button;
-      button = node.querySelectorAll('.area.clear_fix')[0];
-      button.addEventListener('contextmenu', vkdl.download_file_event, false);
+      button = node.querySelector('.area.clear_fix');
+      button.addEventListener('contextmenu', this.download_file_event(null));
     },
     add_event_to_existing_nodes: function() {
-      var nodes;
+      var nodes, that;
+      that = this;
       nodes = document.querySelectorAll('.audio');
-      [].forEach.call(nodes, function(node) {
-        console.log(node);
-        return vkdl.add_event(node);
+      nodes.forEach(function(node) {
+        return that.add_event(node);
       });
     },
     observer: new MutationObserver(function(mutations) {

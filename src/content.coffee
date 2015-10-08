@@ -1,36 +1,46 @@
 # content.coffee
 
+Array.prototype.first = -> @[0]
+NodeList.prototype.first = -> @[0]
+NodeList.prototype.forEach = Array.prototype.forEach
+
 vkdl =
 
   get_url: (parent) ->
-    input = parent.querySelectorAll("input")[0]
-    pos = input.value.indexOf '?'
-    return input.value.substr 0, pos
+    parent
+    .querySelector "input"
+    .value
+    .split '?'
+    .first null
 
   get_song_name: (parent) ->
-    title_wrap = parent.querySelectorAll(".title_wrap")[0]
-    name = title_wrap.innerText.trim().replace '/', '-'
-    return "#{name}.mp3"
+    parent
+    .querySelector ".title_wrap"
+    .innerText
+    .trim null
+    .replace '/', '-'
+    .concat '.mp3'
   
-  download_file_event: (event) ->
-    event.preventDefault()
-    parent = @parentElement
-    url = vkdl.get_url parent
-    name = vkdl.get_song_name parent
-    options = url: url, filename: name, conflictAction: 'uniquify'
-    console.log "#{name} #{url}"
-    #chrome.runtime.sendMessage options
+  download_file_event: () ->
+    that = this
+    return (event) ->
+      event.preventDefault()
+      url  = that.get_url @parentElement
+      name = that.get_song_name @parentElement
+      console.log "#{name} #{url}"
+      options = url: url, filename: name, conflictAction: 'uniquify'
+      #chrome.runtime.sendMessage options
 
   add_event: (node) ->
-    button = node.querySelectorAll('.area.clear_fix')[0]
-    button.addEventListener 'contextmenu', vkdl.download_file_event, false
+    button = node.querySelector '.area.clear_fix'
+    button.addEventListener 'contextmenu', @download_file_event null
     return
 
   add_event_to_existing_nodes: ->
+    that = this
     nodes = document.querySelectorAll '.audio'
-    [].forEach.call nodes, (node) ->
-      console.log node
-      vkdl.add_event node
+    nodes.forEach (node) ->
+      that.add_event node
     return
 
   observer: new MutationObserver (mutations) ->
