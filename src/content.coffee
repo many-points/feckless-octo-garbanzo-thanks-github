@@ -11,6 +11,17 @@ Element.prototype.addEventListener = (event, listener, useCapture) ->
   if not @listenerList[event] then @listenerList[event] = []
   @listenerList[event].push listener
 
+processArray = (items, process) ->
+  if items.length is 0 then return
+  index = 0
+  setTimeout () ->
+    item = items[index]
+    process item
+    index += 1
+    if index < items.length
+      setTimeout arguments.callee, 25
+  , 25
+
 vkdl =
 
   get_url: (parent) ->
@@ -33,7 +44,6 @@ vkdl =
       event.preventDefault()
       url  = vkdl.get_url @parentElement
       name = vkdl.get_song_name @parentElement
-      console.log "vkdl: #{name}\n#{url}"
       options = url: url, filename: name, conflictAction: 'uniquify'
       chrome.runtime.sendMessage options
 
@@ -45,19 +55,18 @@ vkdl =
 
   add_event_to_existing_nodes: ->
     nodes = document.querySelectorAll '.audio'
-    nodes.forEach (node) ->
-      vkdl.add_event node
+    processArray nodes, vkdl.add_event
     return
 
   observer: new MutationObserver (mutations) ->
-    mutations.forEach (mutation) ->
-      mutation.addedNodes.forEach (node) ->
+    processArray mutations, (mutation) ->
+      processArray mutation.addedNodes, (node) ->
         if node.classList?.contains 'audio'
           vkdl.add_event node
         else
-          search = node.querySelectorAll? '.audio'
-          search?.forEach (node) ->
-            vkdl.add_event node
+          nodes = node.querySelectorAll? '.audio'
+          if nodes? and nodes.length isnt 0
+            processArray nodes, vkdl.add_event
 
   start_observer: ->
     config = childList: true, subtree: true
