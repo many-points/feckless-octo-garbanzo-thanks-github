@@ -1,8 +1,6 @@
 # content.coffee
 
 Array.prototype.first = -> @[0]
-NodeList.prototype.first = -> @[0]
-NodeList.prototype.forEach = Array.prototype.forEach
 
 Element.prototype._addEventListener = Element.prototype.addEventListener
 Element.prototype.addEventListener = (event, listener, useCapture) ->
@@ -29,28 +27,27 @@ vkdl =
     .querySelector "input"
     .value
     .split '?'
-    .first null
+    .first()
 
   get_song_name: (parent) ->
     parent
     .querySelector ".title_wrap"
     .innerText
-    .trim null
+    .trim()
     .replace '/', '-'
     .concat '.mp3'
   
-  download_file_event: () ->
-    return (event) ->
-      event.preventDefault()
-      url  = vkdl.get_url @parentElement
-      name = vkdl.get_song_name @parentElement
-      options = url: url, filename: name, conflictAction: 'uniquify'
-      chrome.runtime.sendMessage options
+  download_file_event: (event) ->
+    event.preventDefault()
+    url  = vkdl.get_url @parentElement
+    name = vkdl.get_song_name @parentElement
+    options = url: url, filename: name, conflictAction: 'uniquify'
+    chrome.runtime.sendMessage options
 
   add_event: (node) ->
     button = node.querySelector '.area.clear_fix'
     if button.listenerList?.contextmenu? then return
-    button.addEventListener 'contextmenu', vkdl.download_file_event null
+    button.addEventListener 'contextmenu', vkdl.download_file_event
     return
 
   add_event_to_existing_nodes: ->
@@ -75,5 +72,5 @@ vkdl =
     if page_body? then vkdl.observer.observe page_body, config
     if box_layer? then vkdl.observer.observe box_layer, config
 
-vkdl.add_event_to_existing_nodes null
-vkdl.start_observer null
+vkdl.add_event_to_existing_nodes()
+vkdl.start_observer()

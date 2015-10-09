@@ -6,12 +6,6 @@
     return this[0];
   };
 
-  NodeList.prototype.first = function() {
-    return this[0];
-  };
-
-  NodeList.prototype.forEach = Array.prototype.forEach;
-
   Element.prototype._addEventListener = Element.prototype.addEventListener;
 
   Element.prototype.addEventListener = function(event, listener, useCapture) {
@@ -44,24 +38,22 @@
 
   vkdl = {
     get_url: function(parent) {
-      return parent.querySelector("input").value.split('?').first(null);
+      return parent.querySelector("input").value.split('?').first();
     },
     get_song_name: function(parent) {
-      return parent.querySelector(".title_wrap").innerText.trim(null).replace('/', '-').concat('.mp3');
+      return parent.querySelector(".title_wrap").innerText.trim().replace('/', '-').concat('.mp3');
     },
-    download_file_event: function() {
-      return function(event) {
-        var name, options, url;
-        event.preventDefault();
-        url = vkdl.get_url(this.parentElement);
-        name = vkdl.get_song_name(this.parentElement);
-        options = {
-          url: url,
-          filename: name,
-          conflictAction: 'uniquify'
-        };
-        return chrome.runtime.sendMessage(options);
+    download_file_event: function(event) {
+      var name, options, url;
+      event.preventDefault();
+      url = vkdl.get_url(this.parentElement);
+      name = vkdl.get_song_name(this.parentElement);
+      options = {
+        url: url,
+        filename: name,
+        conflictAction: 'uniquify'
       };
+      return chrome.runtime.sendMessage(options);
     },
     add_event: function(node) {
       var button, ref;
@@ -69,7 +61,7 @@
       if (((ref = button.listenerList) != null ? ref.contextmenu : void 0) != null) {
         return;
       }
-      button.addEventListener('contextmenu', vkdl.download_file_event(null));
+      button.addEventListener('contextmenu', vkdl.download_file_event);
     },
     add_event_to_existing_nodes: function() {
       var nodes;
@@ -108,8 +100,8 @@
     }
   };
 
-  vkdl.add_event_to_existing_nodes(null);
+  vkdl.add_event_to_existing_nodes();
 
-  vkdl.start_observer(null);
+  vkdl.start_observer();
 
 }).call(this);
