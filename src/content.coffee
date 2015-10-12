@@ -29,18 +29,28 @@ vkdl =
     .split '?'
     .first()
 
-  get_song_name: (parent) ->
+  get_artist_name: (parent) ->
     parent
-    .querySelector ".title_wrap"
+    .querySelector ".title_wrap b"
     .innerText
     .trim()
+
+  get_track_name: (parent) ->
+    parent
+    .querySelector ".title_wrap .title"
+    .innerText
+    .trim()
+
+  get_file_name: (parent) ->
+    artist = @get_artist_name parent
+    track  = @get_track_name  parent
+    "#{artist} \u2013 #{track}.mp3"
     .replace '/', '-'
-    .concat '.mp3'
   
   download_file_event: (event) ->
     event.preventDefault()
     url  = vkdl.get_url @parentElement
-    name = vkdl.get_song_name @parentElement
+    name = vkdl.get_file_name @parentElement
     options = url: url, filename: name, conflictAction: 'uniquify'
     chrome.runtime.sendMessage options
 

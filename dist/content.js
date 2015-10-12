@@ -40,14 +40,23 @@
     get_url: function(parent) {
       return parent.querySelector("input").value.split('?').first();
     },
-    get_song_name: function(parent) {
-      return parent.querySelector(".title_wrap").innerText.trim().replace('/', '-').concat('.mp3');
+    get_artist_name: function(parent) {
+      return parent.querySelector(".title_wrap b").innerText.trim();
+    },
+    get_track_name: function(parent) {
+      return parent.querySelector(".title_wrap .title").innerText.trim();
+    },
+    get_file_name: function(parent) {
+      var artist, track;
+      artist = this.get_artist_name(parent);
+      track = this.get_track_name(parent);
+      return (artist + " \u2013 " + track + ".mp3").replace('/', '-');
     },
     download_file_event: function(event) {
       var name, options, url;
       event.preventDefault();
       url = vkdl.get_url(this.parentElement);
-      name = vkdl.get_song_name(this.parentElement);
+      name = vkdl.get_file_name(this.parentElement);
       options = {
         url: url,
         filename: name,
